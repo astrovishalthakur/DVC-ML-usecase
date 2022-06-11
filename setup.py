@@ -12,8 +12,9 @@ setup(
     long_description_content_type="text/markdown",
     author_email="astrovishalthakur@gmail.com",
     url="https://github.com/astrovishalthakur/Simple-DVC-Project",
-    package_dir={"":"src"},
-    packages=find_packages(where="src"),
+    # package_dir={"":"src"}, in this line, empty key makes src source package which we don't want.
+    # packages=find_packages(where="src"),
+    packages = ["src"],
     license="GNU",
     python_requires=">=3.6",
     install_requires=[
