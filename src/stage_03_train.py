@@ -1,5 +1,3 @@
-from posixpath import split
-from random import random
 import pandas as pd
 import argparse
 from sklearn.linear_model import ElasticNet
@@ -9,7 +7,10 @@ from src.utils.common_utils import(
     save_reports,
 )
 
-import joblib
+import joblib, logging
+
+logging_str = "[%(asctime)s: %(levelname)s: %(module)s]: %(message)s"
+logging.basicConfig(level=logging.DEBUG, format=logging_str)
 
 
 def train(config_path):
@@ -17,8 +18,6 @@ def train(config_path):
 
     artifacts = config['artifacts']
     split_data = artifacts["split_data"]
-    processed_data_dir = split_data["processed_data_dir"]
-    test_data_path = split_data["test_path"]
     train_data_path = split_data["train_path"]
 
 
@@ -56,6 +55,8 @@ def train(config_path):
     save_reports(params_file, params)
     joblib.dump(lr, model_path)
 
+    logging.info(f'model saved af {model_path}')
+
 if __name__ == '__main__':
     args = argparse.ArgumentParser()
     args.add_argument("--config", default="params.yaml")
@@ -63,5 +64,6 @@ if __name__ == '__main__':
 
     try:
         data = train(config_path=parsed_args.config)
+        logging.info("training completed")
     except Exception as e:
-        raise e
+        logging.error(e)
